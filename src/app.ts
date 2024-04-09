@@ -1,6 +1,6 @@
 import cors from "cors";
 import express, { Application, NextFunction, Request, Response } from "express";
-// import router from "./app/routes";
+import router from "./app/routes";
 
 const app: Application = express();
 
@@ -16,6 +16,6 @@ app.get("/", async (req: Request, res: Response) => {
   });
 });
 
-// app.use("/api", router);
+app.use("/api", router);
 
 export default app;
