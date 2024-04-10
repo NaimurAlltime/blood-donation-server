@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
 import catchAsync from "../../../shared/catchAsync";
-import { AuthServices } from "./request.service";
 import sendResponse from "../../../shared/sendResponse";
 import httpStatus from "http-status";
+import { RequestService } from "./request.service";
 
 const requestDonation = catchAsync(async (req: Request, res: Response) => {
-  const result = await AuthServices.loginUser(req.body);
+  const result = await RequestService.createRequesDonation(req.body);
 
   sendResponse(res, {
     statusCode: httpStatus.CREATED,
