@@ -3,8 +3,17 @@ import catchAsync from "../../../shared/catchAsync";
 import { AuthServices } from "./auth.service";
 import sendResponse from "../../../shared/sendResponse";
 import httpStatus from "http-status";
+import prisma from "../../../shared/prisma";
 
 const loginUser = catchAsync(async (req: Request, res: Response) => {
+  const { email } = req.body;
+
+  const user = await prisma.user.findUnique({
+    where: {
+      email,
+    },
+  });
+
   const result = await AuthServices.loginUser(req.body);
 
   sendResponse(res, {
@@ -12,7 +21,10 @@ const loginUser = catchAsync(async (req: Request, res: Response) => {
     success: true,
     message: "User logged in successfully",
     data: {
-      accessToken: result.accessToken,
+      id: user?.id,
+      name: user?.name,
+      email: user?.email,
+      token: result.accessToken,
     },
   });
 });
