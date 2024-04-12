@@ -1,3 +1,4 @@
+import { Request } from "@prisma/client";
 import prisma from "../../../shared/prisma";
 
 const createRequesDonation = async (data: any) => {
@@ -58,6 +59,43 @@ const createRequesDonation = async (data: any) => {
   return responseData;
 };
 
+const getAllFromDB = async () => {
+  const donationRequests = await prisma.request.findMany({
+    // where: {
+    //   donorId: user?.id,
+    // },
+    include: {
+      requester: true,
+    },
+  });
+
+  // Prepare response data
+  // const responseData = {
+  //   id: donationRequests?.id,
+  //   donorId: donationRequests.donorId,
+  //   requesterId: donationRequests.requesterId,
+  //   phoneNumber: donationRequests.phoneNumber,
+  //   dateOfDonation: donationRequests.dateOfDonation,
+  //   hospitalName: donationRequests.hospitalName,
+  //   hospitalAddress: donationRequests.hospitalAddress,
+  //   reason: donationRequests.reason,
+  //   requestStatus: donationRequests.requestStatus,
+  //   createdAt: donationRequests.createdAt.toISOString(),
+  //   updatedAt: donationRequests.updatedAt.toISOString(),
+  //   requester: {
+  //     id: donationRequests?.requester?.id,
+  //     name: donationRequests.requester?.name,
+  //     email: donationRequests.requester?.email,
+  //     location: donationRequests.requester?.location,
+  //     bloodType: donationRequests.requester?.bloodType,
+  //     availability: donationRequests.requester?.availability,
+  //   },
+  // };
+
+  return donationRequests;
+};
+
 export const RequestService = {
   createRequesDonation,
+  getAllFromDB,
 };
