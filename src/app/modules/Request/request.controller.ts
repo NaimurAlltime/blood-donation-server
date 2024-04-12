@@ -16,8 +16,8 @@ const requestDonation = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const getAllFromDB = catchAsync(async (req, res) => {
-  const result = await RequestService.getAllFromDB(req.user.id);
+const getAlDonationRequest = catchAsync(async (req, res) => {
+  const result = await RequestService.getAlDonationRequest(req.user.id);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -29,5 +29,5 @@ const getAllFromDB = catchAsync(async (req, res) => {
 
 export const RequestController = {
   requestDonation,
-  getAllFromDB,
+  getAlDonationRequest,
 };

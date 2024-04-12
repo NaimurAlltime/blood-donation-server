@@ -61,13 +61,22 @@ const createRequesDonation = async (data: any) => {
   return responseData;
 };
 
-const getAllFromDB = async (id: any) => {
+const getAlDonationRequest = async (id: any) => {
   const donationRequests = await prisma.request.findMany({
     where: {
       donorId: id,
     },
     include: {
-      requester: true,
+      requester: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          location: true,
+          bloodType: true,
+          availability: true,
+        },
+      },
     },
   });
 
@@ -76,5 +85,5 @@ const getAllFromDB = async (id: any) => {
 
 export const RequestService = {
   createRequesDonation,
-  getAllFromDB,
+  getAlDonationRequest,
 };

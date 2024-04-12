@@ -4,7 +4,7 @@ import auth from "../../middlewares/auth";
 
 const router = express.Router();
 
-router.get("/donation-request", auth(), RequestController.getAllFromDB);
+router.get("/donation-request", auth(), RequestController.getAlDonationRequest);
 
 router.post("/donation-request", auth(), RequestController.requestDonation);
 
