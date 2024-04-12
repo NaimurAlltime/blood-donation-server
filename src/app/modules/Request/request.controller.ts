@@ -17,13 +17,7 @@ const requestDonation = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getAllFromDB = catchAsync(async (req, res) => {
-  // const user = await prisma.user.findUnique({
-  //   where: {
-  //     username: req.user.username,
-  //   },
-  // });
-
-  const result = await RequestService.getAllFromDB();
+  const result = await RequestService.getAllFromDB(req.user.id);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
