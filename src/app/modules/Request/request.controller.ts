@@ -4,6 +4,7 @@ import sendResponse from "../../../shared/sendResponse";
 import httpStatus from "http-status";
 import { RequestService } from "./request.service";
 import prisma from "../../../shared/prisma";
+import { CLIENT_RENEG_LIMIT } from "tls";
 
 const requestDonation = catchAsync(async (req: Request, res: Response) => {
   const result = await RequestService.createRequesDonation(req.body);
@@ -17,7 +18,9 @@ const requestDonation = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getAlDonationRequest = catchAsync(async (req, res) => {
-  const result = await RequestService.getAlDonationRequest(req.user.id);
+  const result = await RequestService.getAlDonationRequest(
+    (req as any).user.id
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

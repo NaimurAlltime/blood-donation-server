@@ -4,13 +4,13 @@ import auth from "../../middlewares/auth";
 
 const router = express.Router();
 
-router.get("/donation-request", auth(), RequestController.getAlDonationRequest);
+router.get("/donation-request", auth, RequestController.getAlDonationRequest);
 
-router.post("/donation-request", auth(), RequestController.requestDonation);
+router.post("/donation-request", auth, RequestController.requestDonation);
 
 router.put(
   "/donation-request/:requestId",
-  auth(),
+  auth,
   RequestController.updateRequestStatus
 );
 

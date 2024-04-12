@@ -83,6 +83,12 @@ const getAlDonationRequest = async (id: any) => {
 };
 
 const updateRequestStatus = async (requestId: string, requestStatus: any) => {
+  await prisma.request.findFirstOrThrow({
+    where: {
+      id: requestId,
+    },
+  });
+
   const result = await prisma.request.update({
     where: {
       id: requestId,
