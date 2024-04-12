@@ -1,6 +1,7 @@
 import cors from "cors";
 import express, { Application, NextFunction, Request, Response } from "express";
 import router from "./app/routes";
+import globalErrorHandler from "./app/middlewares/globalErrorHandler";
 
 const app: Application = express();
 
@@ -17,5 +18,7 @@ app.get("/", async (req: Request, res: Response) => {
 });
 
 app.use("/api", router);
+
+app.use(globalErrorHandler);
 
 export default app;
