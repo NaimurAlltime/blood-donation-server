@@ -8,4 +8,10 @@ router.get("/donation-request", auth(), RequestController.getAlDonationRequest);
 
 router.post("/donation-request", auth(), RequestController.requestDonation);
 
+router.put(
+  "/donation-request/:requestId",
+  auth(),
+  RequestController.updateRequestStatus
+);
+
 export const RequestRoutes = router;

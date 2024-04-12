@@ -1,4 +1,3 @@
-import { Request } from "@prisma/client";
 import prisma from "../../../shared/prisma";
 
 const createRequesDonation = async (data: any) => {
@@ -83,7 +82,19 @@ const getAlDonationRequest = async (id: any) => {
   return donationRequests;
 };
 
+const updateRequestStatus = async (requestId: string, requestStatus: any) => {
+  const result = await prisma.request.update({
+    where: {
+      id: requestId,
+    },
+    data: requestStatus,
+  });
+
+  return result;
+};
+
 export const RequestService = {
   createRequesDonation,
   getAlDonationRequest,
+  updateRequestStatus,
 };

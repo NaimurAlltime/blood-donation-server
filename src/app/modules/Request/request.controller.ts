@@ -27,7 +27,20 @@ const getAlDonationRequest = catchAsync(async (req, res) => {
   });
 });
 
+const updateRequestStatus = catchAsync(async (req: Request, res: Response) => {
+  const { requestId } = req.params;
+
+  const result = await RequestService.updateRequestStatus(requestId, req.body);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Donation request status successfully updated",
+    data: result,
+  });
+});
+
 export const RequestController = {
   requestDonation,
   getAlDonationRequest,
+  updateRequestStatus,
 };
