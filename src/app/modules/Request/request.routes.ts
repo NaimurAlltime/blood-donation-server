@@ -8,7 +8,12 @@ const router = express.Router();
 
 router.get("/donation-request", auth, RequestController.getAlDonationRequest);
 
-router.post("/donation-request", auth, RequestController.requestDonation);
+router.post(
+  "/donation-request",
+  auth,
+  validateRequest(requestValidation.createRequestValidationSchema),
+  RequestController.requestDonation
+);
 
 router.put(
   "/donation-request/:requestId",
