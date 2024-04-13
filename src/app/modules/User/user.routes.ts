@@ -16,6 +16,11 @@ router.post(
   userController.createUser
 );
 
-router.put("/my-profile", auth, userController.updateMyProfile);
+router.put(
+  "/my-profile",
+  auth,
+  validateRequest(UserValidations.updateProfileValidationSchema),
+  userController.updateMyProfile
+);
 
 export const userRoutes = router;
