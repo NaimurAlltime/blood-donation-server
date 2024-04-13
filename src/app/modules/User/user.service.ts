@@ -77,11 +77,22 @@ const getAllFromDB = async (params: any, options: IPaginationOptions) => {
 
   if (Object.keys(filterData).length > 0) {
     andCondions.push({
-      AND: Object.keys(filterData).map((key) => ({
-        [key]: {
-          equals: (filterData as any)[key],
-        },
-      })),
+      AND: Object.keys(filterData).map((key) => {
+        let searchField;
+        if ((filterData as any)[key] === "true") {
+          searchField = true;
+        } else if ((filterData as any)[key] === "false") {
+          searchField = false;
+        } else {
+          searchField = (filterData as any)[key];
+        }
+
+        return {
+          [key]: {
+            equals: searchField,
+          },
+        };
+      }),
     });
   }
 
@@ -148,8 +159,34 @@ const getMyProfileFromDB = async (id: string) => {
   return result;
 };
 
+const updateProfileIntoDB = async (id: string, updateData: any) => {
+  console.log(id, updateData);
+  await prisma.user.findFirstOrThrow({
+    where: {
+      id,
+    },
+  });
+
+  const updadataProfile = await prisma.user.update({
+    where: {
+      id,
+    },
+    data: {
+      userProfile: {
+        update: updateData,
+      },
+    },
+    include: {
+      userProfile: true,
+    },
+  });
+
+  return updadataProfile.userProfile;
+};
+
 export const userService = {
   createUser,
   getAllFromDB,
   getMyProfileFromDB,
+  updateProfileIntoDB,
 };
