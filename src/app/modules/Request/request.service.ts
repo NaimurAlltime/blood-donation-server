@@ -60,11 +60,8 @@ const createRequesDonation = async (data: any) => {
   return responseData;
 };
 
-const getAlDonationRequest = async (id: any) => {
+const getAlDonationRequest = async () => {
   const donationRequests = await prisma.request.findMany({
-    where: {
-      donorId: id,
-    },
     include: {
       requester: {
         select: {

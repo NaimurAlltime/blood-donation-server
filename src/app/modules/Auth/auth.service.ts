@@ -11,6 +11,8 @@ const loginUser = async (payload: { email: string; password: string }) => {
     },
   });
 
+  // console.log(userData);
+
   const isCorrectPassword: boolean = await bcrypt.compare(
     payload.password,
     userData.password
@@ -22,6 +24,7 @@ const loginUser = async (payload: { email: string; password: string }) => {
 
   const accessToken = jwtHelpers.generateToken(
     {
+      id: userData.id,
       email: userData.email,
     },
     config.jwt.jwt_secret as Secret,

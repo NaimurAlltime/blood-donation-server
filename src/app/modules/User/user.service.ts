@@ -1,6 +1,6 @@
 import * as bcrypt from "bcrypt";
 import prisma from "../../../shared/prisma";
-import { Prisma } from "@prisma/client";
+import { Prisma, User } from "@prisma/client";
 import { userSearchAbleFields } from "./user.constant";
 import { paginationHelper } from "../../../helpars/paginationHelper";
 import { IPaginationOptions } from "../../interfaces/pagination";
@@ -127,7 +127,29 @@ const getAllFromDB = async (params: any, options: IPaginationOptions) => {
   };
 };
 
+const getMyProfileFromDB = async (id: string) => {
+  const result = await prisma.user.findUniqueOrThrow({
+    where: {
+      id,
+    },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      bloodType: true,
+      location: true,
+      availability: true,
+      createdAt: true,
+      updatedAt: true,
+      userProfile: true,
+    },
+  });
+
+  return result;
+};
+
 export const userService = {
   createUser,
   getAllFromDB,
+  getMyProfileFromDB,
 };

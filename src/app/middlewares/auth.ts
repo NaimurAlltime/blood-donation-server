@@ -12,7 +12,7 @@ const auth = async (
     const token = req.headers.authorization;
 
     if (!token) {
-      throw new Error("You are not authorized");
+      throw new Error("unauthorized access");
     }
 
     const verifiedUser = jwtHelpers.verifyToken(
