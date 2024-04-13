@@ -40,7 +40,7 @@ model Request {
   hospitalName      String
   hospitalAddress   String
   reason            String
-  requestStatus     RequestStatus @default(PENDING)
+  requestStatus     TRequestStatus @default(PENDING)
   createdAt         DateTime      @default(now())
   updatedAt         DateTime      @updatedAt
   donor             User?         @relation("Donor", fields: [donorId], references: [id])
@@ -75,7 +75,7 @@ enum BloodGroup {
   O_NEGATIVE
 }
 
-enum RequestStatus {
+enum TRequestStatus {
   PENDING
   APPROVED
   REJECTED

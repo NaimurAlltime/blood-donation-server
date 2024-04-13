@@ -159,8 +159,7 @@ const getMyProfileFromDB = async (id: string) => {
   return result;
 };
 
-const updateProfileIntoDB = async (id: string, updateData: any) => {
-  console.log(id, updateData);
+const updateProfileIntoDB = async (id: string, updateData: User) => {
   await prisma.user.findFirstOrThrow({
     where: {
       id,
