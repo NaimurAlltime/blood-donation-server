@@ -1,4 +1,6 @@
 import express, { Request, Response, NextFunction } from "express";
+import { ZodError } from "zod";
+import zodErrorHandler from "../errors/handleZodError";
 
 // Custom error interfaces
 interface ValidationErrorDetails {
@@ -27,11 +29,11 @@ const globalErrorHandler = (
   if (err instanceof UnauthorizedError) {
     statusCode = 401;
     message = "Unauthorized";
-  } else if ((err as ValidationError).issues) {
-    const validationError = err as ValidationError;
-    statusCode = 400;
-    message = "Validation Error";
-    errorDetails = { issues: validationError.issues };
+  } else if (err instanceof ZodError) {
+    const simplifiedError = zodErrorHandler(err);
+    statusCode = simplifiedError.statusCode;
+    message = simplifiedError.message;
+    errorDetails = simplifiedError.errorDetails;
   }
 
   res.status(statusCode).json({
