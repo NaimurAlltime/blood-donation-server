@@ -99,18 +99,23 @@ const getAllFromDB = async (params: any, options: IPaginationOptions) => {
   const whereConditons: Prisma.UserWhereInput =
     andCondions.length > 0 ? { AND: andCondions } : {};
 
+  const orderBy: any = {};
+
+  if (options.sortBy === "name") {
+    orderBy.name = options.sortOrder || "asc";
+  } else if (options.sortBy === "age") {
+    orderBy.userProfile = { age: options.sortOrder || "asc" };
+  } else if (options.sortBy === "lastDonationDate") {
+    orderBy.userProfile = { lastDonationDate: options.sortOrder || "asc" };
+  } else {
+    orderBy.createdAt = options.sortOrder || "asc";
+  }
+
   const result = await prisma.user.findMany({
     where: whereConditons,
     skip,
     take: limit,
-    orderBy:
-      options.sortBy && options.sortOrder
-        ? {
-            [options.sortBy]: options.sortOrder,
-          }
-        : {
-            createdAt: "desc",
-          },
+    orderBy,
     select: {
       id: true,
       name: true,
