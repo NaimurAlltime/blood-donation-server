@@ -62,10 +62,10 @@ const getAllFromDB = async (params: any, options: IPaginationOptions) => {
   const { page, limit, skip } = paginationHelper.calculatePagination(options);
   const { searchTerm, ...filterData } = params;
 
-  const andCondions: Prisma.UserWhereInput[] = [];
+  const andCondtions: Prisma.UserWhereInput[] = [];
 
   if (params.searchTerm) {
-    andCondions.push({
+    andCondtions.push({
       OR: userSearchAbleFields.map((field) => ({
         [field]: {
           contains: params.searchTerm,
@@ -76,7 +76,7 @@ const getAllFromDB = async (params: any, options: IPaginationOptions) => {
   }
 
   if (Object.keys(filterData).length > 0) {
-    andCondions.push({
+    andCondtions.push({
       AND: Object.keys(filterData).map((key) => {
         let searchField;
         if ((filterData as any)[key] === "true") {
@@ -97,7 +97,7 @@ const getAllFromDB = async (params: any, options: IPaginationOptions) => {
   }
 
   const whereConditons: Prisma.UserWhereInput =
-    andCondions.length > 0 ? { AND: andCondions } : {};
+    andCondtions.length > 0 ? { AND: andCondtions } : {};
 
   const orderBy: any = {};
 

@@ -5,7 +5,3 @@ export const userFilterableFields: string[] = [
   "availability",
   "searchTerm",
 ];
-
-// "bloodType",
-// "location",
-// "name",
