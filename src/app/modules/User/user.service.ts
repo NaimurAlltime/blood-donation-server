@@ -63,7 +63,6 @@ const getAllFromDB = async (params: any, options: IPaginationOptions) => {
   const { searchTerm, ...filterData } = params;
 
   const andCondtions: Prisma.UserWhereInput[] = [];
-  console.log(searchTerm);
   if (params.searchTerm) {
     andCondtions.push({
       OR: userSearchAbleFields.map((field) => ({
