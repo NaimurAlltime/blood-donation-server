@@ -7,10 +7,6 @@ const createRequestValidationSchema = z.object({
       invalid_type_error: "donorId must be string",
       required_error: "donorId is required",
     }),
-    requesterId: z.string({
-      invalid_type_error: "requesterId must be string",
-      required_error: "requesterId is required",
-    }),
     phoneNumber: z.string({
       invalid_type_error: "phoneNumber must be string",
       required_error: "phoneNumber is required",

@@ -1,67 +1,61 @@
 import prisma from "../../../shared/prisma";
 
-const createRequesDonation = async (data: any) => {
+const createRequesDonation = async (id: string, data: any) => {
+  await prisma.user.findUniqueOrThrow({
+    where: {
+      id,
+    },
+  });
+
   const requestData = {
-    donorId: data.donorId,
-    requesterId: data.requesterId,
-    phoneNumber: data.phoneNumber,
-    dateOfDonation: data.dateOfDonation,
-    hospitalName: data.hospitalName,
-    hospitalAddress: data.hospitalAddress,
-    reason: data.reason,
+    ...data,
+    requesterId: id,
   };
 
   // Create blood donation request
   const donationRequest = await prisma.request.create({
     data: requestData,
-    include: {
+    select: {
+      id: true,
+      donorId: true,
+      phoneNumber: true,
+      dateOfDonation: true,
+      hospitalName: true,
+      hospitalAddress: true,
+      reason: true,
+      requestStatus: true,
+      createdAt: true,
+      updatedAt: true,
       donor: {
-        include: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          bloodType: true,
+          location: true,
+          availability: true,
+          createdAt: true,
+          updatedAt: true,
           userProfile: true,
         },
       },
     },
   });
 
-  // Prepare response
-  const responseData = {
-    id: donationRequest.id,
-    donorId: donationRequest.donorId,
-    requesterId: donationRequest.requesterId,
-    phoneNumber: donationRequest.phoneNumber,
-    dateOfDonation: donationRequest.dateOfDonation,
-    hospitalName: donationRequest.hospitalName,
-    hospitalAddress: donationRequest.hospitalAddress,
-    reason: donationRequest.reason,
-    requestStatus: donationRequest.requestStatus,
-    createdAt: donationRequest.createdAt.toISOString(),
-    updatedAt: donationRequest.updatedAt.toISOString(),
-    donor: {
-      id: donationRequest.donor?.id,
-      name: donationRequest.donor?.name,
-      email: donationRequest.donor?.email,
-      bloodType: donationRequest.donor?.bloodType,
-      location: donationRequest.donor?.location,
-      availability: donationRequest.donor?.availability,
-      createdAt: donationRequest.donor?.createdAt,
-      updatedAt: donationRequest.donor?.updatedAt,
-      userProfile: {
-        id: donationRequest.donor?.userProfile?.id,
-        userId: donationRequest.donor?.userProfile?.userId,
-        bio: donationRequest.donor?.userProfile?.bio,
-        age: donationRequest.donor?.userProfile?.age,
-        lastDonationDate: donationRequest.donor?.userProfile?.lastDonationDate,
-        createdAt: donationRequest.donor?.userProfile?.createdAt,
-        updatedAt: donationRequest.donor?.userProfile?.updatedAt,
-      },
-    },
-  };
-
-  return responseData;
+  return donationRequest;
 };
 
-const getAlDonationRequest = async () => {
+const getAlDonationRequest = async (id: string) => {
+  await prisma.user.findUniqueOrThrow({
+    where: {
+      id,
+    },
+  });
+
   const donationRequests = await prisma.request.findMany({
+    where: {
+      donorId: id,
+    },
     include: {
       requester: {
         select: {
@@ -80,7 +74,7 @@ const getAlDonationRequest = async () => {
 };
 
 const updateRequestStatus = async (requestId: string, requestStatus: any) => {
-  await prisma.request.findFirstOrThrow({
+  await prisma.request.findUniqueOrThrow({
     where: {
       id: requestId,
     },

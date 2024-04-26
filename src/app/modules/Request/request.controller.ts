@@ -5,7 +5,9 @@ import httpStatus from "http-status";
 import { RequestService } from "./request.service";
 
 const requestDonation = catchAsync(async (req: Request, res: Response) => {
-  const result = await RequestService.createRequesDonation(req.body);
+  const { id } = (req as any).user;
+
+  const result = await RequestService.createRequesDonation(id, req.body);
 
   sendResponse(res, {
     statusCode: httpStatus.CREATED,
@@ -16,7 +18,9 @@ const requestDonation = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getAlDonationRequest = catchAsync(async (req, res) => {
-  const result = await RequestService.getAlDonationRequest();
+  const { id } = (req as any).user;
+
+  const result = await RequestService.getAlDonationRequest(id);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
