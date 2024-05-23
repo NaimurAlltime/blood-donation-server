@@ -3,9 +3,9 @@ import { z } from "zod";
 
 const createUserValidationSchema = z.object({
   body: z.object({
-    name: z.string({
-      invalid_type_error: "name must be string",
-      required_error: "name is required",
+    username: z.string({
+      invalid_type_error: "username must be string",
+      required_error: "username is required",
     }),
     email: z
       .string({
@@ -55,10 +55,10 @@ const createUserValidationSchema = z.object({
 
 const updateProfileValidationSchema = z.object({
   body: z.object({
-    name: z
+    username: z
       .string({
-        invalid_type_error: "name must be string",
-        required_error: "name is required",
+        invalid_type_error: "username must be string",
+        required_error: "username is required",
       })
       .optional(),
     bloodType: z

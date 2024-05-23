@@ -26,6 +26,7 @@ const loginUser = async (payload: { email: string; password: string }) => {
     {
       id: userData.id,
       email: userData.email,
+      role: userData.role,
     },
     config.jwt.jwt_secret as Secret,
     config.jwt.expires_in as string
