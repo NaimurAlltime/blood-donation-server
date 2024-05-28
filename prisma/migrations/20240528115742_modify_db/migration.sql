@@ -7,13 +7,18 @@ CREATE TYPE "TRequestStatus" AS ENUM ('PENDING', 'APPROVED', 'REJECTED');
 -- CreateEnum
 CREATE TYPE "UserRole" AS ENUM ('USER', 'ADMIN');
 
+-- CreateEnum
+CREATE TYPE "UserStatus" AS ENUM ('ACTIVE', 'DEACTIVATE');
+
 -- CreateTable
 CREATE TABLE "users" (
     "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
     "username" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "role" "UserRole" NOT NULL,
+    "status" "UserStatus" NOT NULL DEFAULT 'ACTIVE',
     "bloodType" "BloodGroup" NOT NULL,
     "location" TEXT NOT NULL,
     "availability" BOOLEAN NOT NULL DEFAULT false,
@@ -44,9 +49,9 @@ CREATE TABLE "requests" (
 CREATE TABLE "userProfiles" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
-    "bio" TEXT NOT NULL,
     "age" INTEGER NOT NULL,
     "lastDonationDate" TEXT NOT NULL,
+    "profilePhoto" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 

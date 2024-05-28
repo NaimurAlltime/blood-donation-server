@@ -22,7 +22,7 @@ const loginUser = catchAsync(async (req: Request, res: Response) => {
     message: "User logged in successfully",
     data: {
       id: user?.id,
-      username: user?.username,
+      name: user?.name,
       email: user?.email,
       token: result.accessToken,
     },

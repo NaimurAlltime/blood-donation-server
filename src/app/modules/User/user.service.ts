@@ -1,5 +1,5 @@
 import * as bcrypt from "bcrypt";
-import { Prisma, User } from "@prisma/client";
+import { Prisma, User, UserRole } from "@prisma/client";
 import { userSearchAbleFields } from "./user.constant";
 import { paginationHelper } from "../../../helpars/paginationHelper";
 import { IPaginationOptions } from "../../interfaces/pagination";
@@ -8,26 +8,15 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-interface CreateUserData {
-  username: string;
-  email: string;
-  password: string;
-  role: string;
-  bloodType: string;
-  location: string;
-  bio: string;
-  age: number;
-  lastDonationDate: Date;
-}
-
 const createUser = async (data: any) => {
   const hashedPassword: string = await bcrypt.hash(data.password, 12);
 
   const userData = {
+    name: data.name,
     username: data.username,
     email: data.email,
     password: hashedPassword,
-    role: data.role,
+    role: UserRole.USER,
     bloodType: data.bloodType,
     location: data.location,
   };
@@ -37,6 +26,7 @@ const createUser = async (data: any) => {
       data: userData,
       select: {
         id: true,
+        name: true,
         username: true,
         email: true,
         role: true,
@@ -51,9 +41,9 @@ const createUser = async (data: any) => {
 
     const userProfileData = {
       userId: user.id,
-      bio: data.bio,
       age: data.age,
       lastDonationDate: data.lastDonationDate,
+      profilePhoto: data.profilePhoto,
     };
 
     const createdUserProfile = await transactionClient.userProfile.create({
@@ -62,6 +52,7 @@ const createUser = async (data: any) => {
 
     return {
       id: user.id,
+      name: user.name,
       username: user.username,
       email: user.email,
       role: user.role,
@@ -135,8 +126,10 @@ const getAllFromDB = async (params: any, options: IPaginationOptions) => {
     orderBy,
     select: {
       id: true,
+      name: true,
       username: true,
       email: true,
+      role: true,
       bloodType: true,
       location: true,
       availability: true,
@@ -167,8 +160,10 @@ const getMyProfileFromDB = async (id: string) => {
     },
     select: {
       id: true,
+      name: true,
       username: true,
       email: true,
+      role: true,
       bloodType: true,
       location: true,
       availability: true,

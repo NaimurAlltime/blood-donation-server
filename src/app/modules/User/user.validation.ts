@@ -3,9 +3,9 @@ import { z } from "zod";
 
 const createUserValidationSchema = z.object({
   body: z.object({
-    username: z.string({
-      invalid_type_error: "username must be string",
-      required_error: "username is required",
+    name: z.string({
+      invalid_type_error: "name must be string",
+      required_error: "name is required",
     }),
     email: z
       .string({
@@ -42,23 +42,24 @@ const createUserValidationSchema = z.object({
       invalid_type_error: "age must be number",
       required_error: "age is required",
     }),
-    bio: z.string({
-      invalid_type_error: "bio must be string",
-      required_error: "bio is required",
-    }),
     lastDonationDate: z.string({
       invalid_type_error: "lastDonationDate must be string",
       required_error: "lastDonationDate is required",
     }),
+    profilePhoto: z
+      .string({
+        invalid_type_error: "profilePhoto must be string",
+      })
+      .optional(),
   }),
 });
 
 const updateProfileValidationSchema = z.object({
   body: z.object({
-    username: z
+    name: z
       .string({
-        invalid_type_error: "username must be string",
-        required_error: "username is required",
+        invalid_type_error: "name must be string",
+        required_error: "name is required",
       })
       .optional(),
     bloodType: z

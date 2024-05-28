@@ -29,7 +29,7 @@ const createRequesDonation = async (id: string, data: any) => {
       donor: {
         select: {
           id: true,
-          username: true,
+          name: true,
           email: true,
           bloodType: true,
           location: true,
@@ -60,7 +60,7 @@ const getAlDonationRequest = async (id: string) => {
       requester: {
         select: {
           id: true,
-          username: true,
+          name: true,
           email: true,
           location: true,
           bloodType: true,
