@@ -7,6 +7,10 @@ const createUserValidationSchema = z.object({
       invalid_type_error: "name must be string",
       required_error: "name is required",
     }),
+    username: z.string({
+      invalid_type_error: "username must be string",
+      required_error: "username is required",
+    }),
     email: z
       .string({
         invalid_type_error: "email must be string",

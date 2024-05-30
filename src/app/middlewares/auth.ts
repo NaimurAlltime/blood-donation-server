@@ -46,7 +46,7 @@ const auth =
       );
 
       const user = await prisma.user.findUniqueOrThrow({
-        where: { email: verifiedUser.email },
+        where: { id: verifiedUser.id },
       });
 
       if (roles.length && !roles.includes(user.role)) {

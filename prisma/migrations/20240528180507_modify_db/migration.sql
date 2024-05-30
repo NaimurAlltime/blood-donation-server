@@ -17,7 +17,7 @@ CREATE TABLE "users" (
     "username" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
-    "role" "UserRole" NOT NULL,
+    "role" "UserRole" NOT NULL DEFAULT 'USER',
     "status" "UserStatus" NOT NULL DEFAULT 'ACTIVE',
     "bloodType" "BloodGroup" NOT NULL,
     "location" TEXT NOT NULL,

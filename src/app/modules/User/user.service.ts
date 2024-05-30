@@ -1,5 +1,5 @@
 import * as bcrypt from "bcrypt";
-import { Prisma, User, UserRole } from "@prisma/client";
+import { Prisma, User } from "@prisma/client";
 import { userSearchAbleFields } from "./user.constant";
 import { paginationHelper } from "../../../helpars/paginationHelper";
 import { IPaginationOptions } from "../../interfaces/pagination";
@@ -9,6 +9,27 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 const createUser = async (data: any) => {
+  // Check if the username or email already exists
+  const existingUser = await prisma.user.findFirst({
+    where: {
+      OR: [{ username: data.username }, { email: data.email }],
+    },
+    select: {
+      username: true,
+      email: true,
+    },
+  });
+
+  if (existingUser) {
+    if (existingUser.username === data.username) {
+      throw new Error("Username already taken, please choose a different one.");
+    } else if (existingUser.email === data.email) {
+      throw new Error(
+        "Email already registered, please use a different email."
+      );
+    }
+  }
+
   const hashedPassword: string = await bcrypt.hash(data.password, 12);
 
   const userData = {
@@ -16,7 +37,6 @@ const createUser = async (data: any) => {
     username: data.username,
     email: data.email,
     password: hashedPassword,
-    role: UserRole.USER,
     bloodType: data.bloodType,
     location: data.location,
   };
@@ -64,8 +84,11 @@ const createUser = async (data: any) => {
       userProfile: createdUserProfile,
     };
   });
+
   return result;
 };
+
+export default createUser;
 
 const getAllFromDB = async (params: any, options: IPaginationOptions) => {
   const { page, limit, skip } = paginationHelper.calculatePagination(options);
@@ -176,20 +199,33 @@ const getMyProfileFromDB = async (id: string) => {
   return result;
 };
 
-const updateProfileIntoDB = async (id: string, updateData: User) => {
+const updateProfileIntoDB = async (id: string, updateData: any) => {
+  // Find the user and throw an error if not found
   await prisma.user.findUniqueOrThrow({
     where: {
       id,
     },
   });
 
-  const updadataProfile = await prisma.user.update({
+  // Update the user and userProfile data
+  const updatedProfile = await prisma.user.update({
     where: {
       id,
     },
     data: {
+      name: updateData.name,
+      username: updateData.username,
+      email: updateData.email,
+      role: updateData.role,
+      bloodType: updateData.bloodType,
+      location: updateData.location,
+      availability: updateData.availability,
       userProfile: {
-        update: updateData,
+        update: {
+          age: updateData?.userProfile?.age,
+          lastDonationDate: updateData?.userProfile?.lastDonationDate,
+          profilePhoto: updateData?.userProfile?.profilePhoto,
+        },
       },
     },
     include: {
@@ -197,7 +233,7 @@ const updateProfileIntoDB = async (id: string, updateData: User) => {
     },
   });
 
-  return updadataProfile.userProfile;
+  return updatedProfile;
 };
 
 export const userService = {

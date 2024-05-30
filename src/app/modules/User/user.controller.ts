@@ -26,8 +26,7 @@ const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
     statusCode: httpStatus.OK,
     success: true,
     message: "Donors successfully found",
-    meta: result.meta,
-    data: result.data,
+    data: result,
   });
 });
 
