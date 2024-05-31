@@ -6,11 +6,11 @@ import httpStatus from "http-status";
 import prisma from "../../../shared/prisma";
 
 const loginUser = catchAsync(async (req: Request, res: Response) => {
-  const { email } = req.body;
+  const { id } = req.body;
 
-  const user = await prisma.user.findUnique({
+  const user = await prisma.user.findFirst({
     where: {
-      email,
+      id,
     },
   });
 
@@ -23,6 +23,7 @@ const loginUser = catchAsync(async (req: Request, res: Response) => {
     data: {
       id: user?.id,
       name: user?.name,
+      username: user?.username,
       email: user?.email,
       role: user?.role,
       token: result.accessToken,

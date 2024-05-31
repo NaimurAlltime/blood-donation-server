@@ -1,6 +1,8 @@
 import express, { Request, Response, NextFunction } from "express";
 import { ZodError } from "zod";
 import zodErrorHandler from "../errors/handleZodError";
+import handleCustomError from "../errors/handleCustomError";
+import AppError from "../errors/AppError";
 
 // Custom error interfaces
 interface ValidationErrorDetails {
@@ -34,6 +36,12 @@ const globalErrorHandler = (
     statusCode = simplifiedError.statusCode;
     message = simplifiedError.message;
     errorDetails = simplifiedError.errorDetails;
+  } else if (err instanceof AppError) {
+    const errors = handleCustomError(err);
+
+    statusCode = err.statusCode;
+    message = err.message;
+    errorDetails = errors;
   }
 
   res.status(statusCode).json({

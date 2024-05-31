@@ -1,15 +1,17 @@
-// create  error class for our custom errors
 class AppError extends Error {
-  statusCode: number;
-  status: string;
-  isOperational: boolean;
+  public statusCode: number;
+  public type: string = "";
 
-  constructor(message: string, statusCode: number) {
+  constructor(statusCode: number, message: string, type = "", stack = "") {
     super(message);
     this.statusCode = statusCode;
-    this.status = `${statusCode}`.startsWith("4") ? "fail" : "error";
-    this.isOperational = true;
-    Error.captureStackTrace(this, this.constructor);
+    this.type = type;
+
+    if (stack) {
+      this.stack = stack;
+    } else {
+      Error.captureStackTrace(this, this.constructor);
+    }
   }
 }
 

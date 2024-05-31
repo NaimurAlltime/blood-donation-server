@@ -3,19 +3,31 @@ import prisma from "../../../shared/prisma";
 import * as bcrypt from "bcrypt";
 import config from "../../../config";
 import { JwtPayload, Secret } from "jsonwebtoken";
-import ApiError from "../../errors/ApiError";
 import httpStatus from "http-status";
 import { UserStatus } from "@prisma/client";
 import { IChangePassword } from "./auth.interface";
 import { AuthUtils } from "./auth.utils";
 import { hashedPassword } from "../../../helpars/hashPasswordHelper";
+import AppError from "../../errors/AppError";
 
-const loginUser = async (payload: { email: string; password: string }) => {
-  const userData = await prisma.user.findUniqueOrThrow({
+const loginUser = async (payload: {
+  usernameOrEmail: string;
+  password: string;
+}) => {
+  // Find user by email or username
+  const userData = await prisma.user.findFirst({
     where: {
-      email: payload.email,
+      OR: [
+        { email: payload.usernameOrEmail },
+        { username: payload.usernameOrEmail },
+      ],
     },
   });
+
+  // If no user is found, throw an error
+  if (!userData) {
+    throw new AppError(httpStatus.NOT_FOUND, "User not found!");
+  }
 
   // console.log(userData);
 
@@ -25,7 +37,7 @@ const loginUser = async (payload: { email: string; password: string }) => {
   );
 
   if (!isCorrectPassword) {
-    throw new Error("Password incorrect!");
+    throw new AppError(httpStatus.NOT_FOUND, "Password incorrect!");
   }
 
   const accessToken = jwtHelpers.generateToken(
@@ -57,7 +69,7 @@ const changePassword = async (
   });
 
   if (!isUserExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, "User does not exist");
+    throw new AppError(httpStatus.NOT_FOUND, "User does not exist");
   }
 
   // checking old password
@@ -65,7 +77,7 @@ const changePassword = async (
     isUserExist.password &&
     !(await AuthUtils.comparePasswords(oldPassword, isUserExist.password))
   ) {
-    throw new ApiError(httpStatus.UNAUTHORIZED, "Old Password is incorrect");
+    throw new AppError(httpStatus.UNAUTHORIZED, "Old Password is incorrect");
   }
 
   const hashPassword = await hashedPassword(newPassword);
