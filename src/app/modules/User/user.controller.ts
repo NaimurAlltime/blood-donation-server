@@ -16,12 +16,24 @@ const createUser = catchAsync(async (req, res) => {
   });
 });
 
-const getAllFromDB = catchAsync(async (req, res) => {
+const getAllDonor = catchAsync(async (req, res) => {
   const filters = pick(req.query, userFilterableFields);
   const options = pick(req.query, ["limit", "page", "sortBy", "sortOrder"]);
 
   const result = await userService.getAllFromDB(filters, options);
 
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Donors successfully found",
+    data: result,
+  });
+});
+
+const getSingleDonor = catchAsync(async (req, res) => {
+  const { id } = req.params;
+
+  const result = await userService.getSingleDonor(id);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -80,7 +92,8 @@ const updateStatus = catchAsync(async (req, res) => {
 
 export const userController = {
   createUser,
-  getAllFromDB,
+  getAllDonor,
+  getSingleDonor,
   getMyProfile,
   updateMyProfile,
   updateUserRole,

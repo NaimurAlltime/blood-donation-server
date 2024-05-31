@@ -7,7 +7,8 @@ import userRoles from "../../../shared/userRoles";
 
 const router = express.Router();
 
-router.get("/donor-list", userController.getAllFromDB);
+router.get("/donor-list", userController.getAllDonor);
+router.get("/donor-list/:id", userController.getSingleDonor);
 
 router.get(
   "/my-profile",

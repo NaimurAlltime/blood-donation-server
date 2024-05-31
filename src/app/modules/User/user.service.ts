@@ -141,7 +141,7 @@ const getAllFromDB = async (params: any, options: IPaginationOptions) => {
   } else if (options.sortBy === "lastDonationDate") {
     orderBy.userProfile = { lastDonationDate: options.sortOrder || "asc" };
   } else {
-    orderBy.createdAt = options.sortOrder || "asc";
+    orderBy.createdAt = options.sortOrder || "desc";
   }
 
   const result = await prisma.user.findMany({
@@ -174,9 +174,17 @@ const getAllFromDB = async (params: any, options: IPaginationOptions) => {
       total,
       page,
       limit,
+      totalPage: Math.ceil(total / limit),
     },
     data: result,
   };
+};
+// donates: true, requestes: true
+const getSingleDonor = async (id: string) => {
+  return prisma.user.findUniqueOrThrow({
+    where: { id: id },
+    include: { userProfile: true },
+  });
 };
 
 const getMyProfileFromDB = async (id: string) => {
@@ -285,6 +293,7 @@ const updateStatusIntoDB = async (
 export const userService = {
   createUser,
   getAllFromDB,
+  getSingleDonor,
   getMyProfileFromDB,
   updateProfileIntoDB,
   updateRoleIntoDB,
