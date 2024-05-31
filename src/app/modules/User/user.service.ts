@@ -1,5 +1,5 @@
 import * as bcrypt from "bcrypt";
-import { Prisma, User } from "@prisma/client";
+import { Prisma, User, UserRole, UserStatus } from "@prisma/client";
 import { userSearchAbleFields } from "./user.constant";
 import { paginationHelper } from "../../../helpars/paginationHelper";
 import { IPaginationOptions } from "../../interfaces/pagination";
@@ -50,6 +50,7 @@ const createUser = async (data: any) => {
         username: true,
         email: true,
         role: true,
+        status: true,
         bloodType: true,
         location: true,
         availability: true,
@@ -76,6 +77,7 @@ const createUser = async (data: any) => {
       username: user.username,
       email: user.email,
       role: user.role,
+      status: user.status,
       bloodType: user.bloodType,
       location: user.location,
       availability: user.availability,
@@ -153,6 +155,7 @@ const getAllFromDB = async (params: any, options: IPaginationOptions) => {
       username: true,
       email: true,
       role: true,
+      status: true,
       bloodType: true,
       location: true,
       availability: true,
@@ -236,9 +239,54 @@ const updateProfileIntoDB = async (id: string, updateData: any) => {
   return updatedProfile;
 };
 
+const updateRoleIntoDB = async (id: string, payload: { role: UserRole }) => {
+  // Find the user and throw an error if not found
+  await prisma.user.findUniqueOrThrow({
+    where: {
+      id,
+    },
+  });
+
+  const result = await prisma.user.update({
+    where: {
+      id,
+    },
+    data: {
+      role: payload.role,
+    },
+  });
+
+  return result;
+};
+
+const updateStatusIntoDB = async (
+  id: string,
+  payload: { status: UserStatus }
+) => {
+  // Find the user and throw an error if not found
+  await prisma.user.findUniqueOrThrow({
+    where: {
+      id,
+    },
+  });
+
+  const result = await prisma.user.update({
+    where: {
+      id,
+    },
+    data: {
+      status: payload.status,
+    },
+  });
+
+  return result;
+};
+
 export const userService = {
   createUser,
   getAllFromDB,
   getMyProfileFromDB,
   updateProfileIntoDB,
+  updateRoleIntoDB,
+  updateStatusIntoDB,
 };

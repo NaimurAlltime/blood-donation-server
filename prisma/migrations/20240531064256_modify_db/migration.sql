@@ -8,7 +8,7 @@ CREATE TYPE "TRequestStatus" AS ENUM ('PENDING', 'APPROVED', 'REJECTED');
 CREATE TYPE "UserRole" AS ENUM ('USER', 'ADMIN');
 
 -- CreateEnum
-CREATE TYPE "UserStatus" AS ENUM ('ACTIVE', 'DEACTIVATE');
+CREATE TYPE "UserStatus" AS ENUM ('ACTIVE', 'DEACTIVE');
 
 -- CreateTable
 CREATE TABLE "users" (

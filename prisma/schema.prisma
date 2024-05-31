@@ -88,5 +88,5 @@ enum UserRole {
 
 enum UserStatus {
   ACTIVE
-  DEACTIVATE
+  DEACTIVE
 }

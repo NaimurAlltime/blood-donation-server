@@ -6,7 +6,7 @@ import httpStatus from "http-status";
 import pick from "../../../helpars/pick";
 import { userFilterableFields } from "./user.constant";
 
-const createUser = catchAsync(async (req: Request, res: Response) => {
+const createUser = catchAsync(async (req, res) => {
   const result = await userService.createUser(req.body);
   sendResponse(res, {
     statusCode: httpStatus.CREATED,
@@ -16,7 +16,7 @@ const createUser = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
+const getAllFromDB = catchAsync(async (req, res) => {
   const filters = pick(req.query, userFilterableFields);
   const options = pick(req.query, ["limit", "page", "sortBy", "sortOrder"]);
 
@@ -30,7 +30,7 @@ const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const getMyProfile = catchAsync(async (req: Request, res: Response) => {
+const getMyProfile = catchAsync(async (req, res) => {
   const { id } = (req as any).user;
   const result = await userService.getMyProfileFromDB(id);
 
@@ -42,7 +42,7 @@ const getMyProfile = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const updateMyProfile = catchAsync(async (req: Request, res: Response) => {
+const updateMyProfile = catchAsync(async (req, res) => {
   const { id } = (req as any).user;
 
   const result = await userService.updateProfileIntoDB(id, req.body);
@@ -54,9 +54,35 @@ const updateMyProfile = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const updateUserRole = catchAsync(async (req, res) => {
+  const { id } = req.params;
+
+  const result = await userService.updateRoleIntoDB(id, req.body);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Role updated successfully",
+    data: result,
+  });
+});
+
+const updateStatus = catchAsync(async (req, res) => {
+  const { id } = req.params;
+
+  const result = await userService.updateStatusIntoDB(id, req.body);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Status updated successfully",
+    data: result,
+  });
+});
+
 export const userController = {
   createUser,
   getAllFromDB,
   getMyProfile,
   updateMyProfile,
+  updateUserRole,
+  updateStatus,
 };

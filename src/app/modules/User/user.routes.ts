@@ -28,4 +28,16 @@ router.put(
   userController.updateMyProfile
 );
 
+router.patch(
+  "/users/role/:id",
+  auth(userRoles.ADMIN),
+  userController.updateUserRole
+);
+
+router.patch(
+  "/users/status/:id",
+  auth(userRoles.ADMIN),
+  userController.updateStatus
+);
+
 export const userRoutes = router;
