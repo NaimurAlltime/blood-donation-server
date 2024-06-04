@@ -39,6 +39,7 @@ CREATE TABLE "requests" (
     "hospitalAddress" TEXT NOT NULL,
     "reason" TEXT NOT NULL,
     "requestStatus" "TRequestStatus" NOT NULL DEFAULT 'PENDING',
+    "termsAndCondition" BOOLEAN NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
