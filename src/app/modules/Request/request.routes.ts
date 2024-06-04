@@ -22,10 +22,4 @@ router.patch(
   RequestController.updateRequestStatus
 );
 
-// router.patch(
-//   "/donation-request/:id",
-//   auth(),
-//   RequestController.acceptDonationRequest
-// );
-
 export const RequestRoutes = router;

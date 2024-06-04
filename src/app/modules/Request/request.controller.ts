@@ -55,25 +55,9 @@ const updateRequestStatus = catchAsync(async (req, res) => {
   });
 });
 
-const acceptDonationRequest = catchAsync(async (req, res) => {
-  const { requestId } = req.params;
-
-  const result = await RequestService.acceptDonationRequest(
-    requestId,
-    req.body
-  );
-  sendResponse(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: "Donation Request accepted!",
-    data: result,
-  });
-});
-
 export const RequestController = {
   requestDonation,
   getAlDonationRequest,
   getMyAllRequest,
   updateRequestStatus,
-  acceptDonationRequest,
 };

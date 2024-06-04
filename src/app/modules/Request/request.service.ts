@@ -50,31 +50,18 @@ const createRequesDonation = async (id: string, data: any) => {
 };
 
 const getAlDonationRequest = async (id: string) => {
-  await prisma.user.findUniqueOrThrow({
-    where: {
-      id,
-    },
-  });
-
-  const donationRequests = await prisma.request.findMany({
-    where: {
-      donorId: id,
-    },
+  const donor = await prisma.user.findUnique({
+    where: { id },
     include: {
-      requester: {
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          location: true,
-          bloodType: true,
-          availability: true,
+      donor: {
+        where: { requestStatus: { not: { equals: TRequestStatus.APPROVED } } },
+        include: {
+          requester: true,
         },
       },
     },
   });
-
-  return donationRequests;
+  return donor?.donor;
 };
 
 const getMyRequests = async (id: string) => {
@@ -115,49 +102,9 @@ const updateRequestStatus = async (
   return result;
 };
 
-const acceptDonationRequest = async (requestId: string, userId: string) => {
-  // Fetch the request from the database
-  const request = await prisma.request.findUnique({
-    where: { id: requestId },
-  });
-
-  // Check if the request exists
-  if (!request) {
-    throw new AppError(httpStatus.BAD_REQUEST, "Request not found");
-  }
-
-  // Fetch the user from the database
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-  });
-
-  // Check if the user exists
-  if (!user) {
-    throw new AppError(httpStatus.BAD_REQUEST, "User not found");
-  }
-
-  // // Ensure that the user is not accepting their own request
-  // if (request.requesterId === user.id) {
-  //   throw new AppError(
-  //     httpStatus.FORBIDDEN,
-  //     "You cannot accept your own request"
-  //   );
-  // }
-
-  // Update the request to set the donor and change the status to approved
-  return await prisma.request.update({
-    where: { id: request.id },
-    data: {
-      donorId: user.id,
-      requestStatus: TRequestStatus.APPROVED,
-    },
-  });
-};
-
 export const RequestService = {
   createRequesDonation,
   getAlDonationRequest,
   updateRequestStatus,
-  acceptDonationRequest,
   getMyRequests,
 };
