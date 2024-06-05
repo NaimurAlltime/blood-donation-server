@@ -38,6 +38,7 @@ const createUser = async (data: any) => {
     email: data.email,
     password: hashedPassword,
     bloodType: data.bloodType,
+    availability: data.availability,
     location: data.location,
   };
 
