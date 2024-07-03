@@ -14,7 +14,7 @@ interface ValidationError extends Error {
   issues: ValidationErrorDetails[];
 }
 
-// Custom error classes
+// Custom error class
 class UnauthorizedError extends Error {}
 
 // Global error handling middleware
